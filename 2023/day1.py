@@ -74,16 +74,17 @@ What is the sum of all of the calibration values?"""
 # --- Part Two ---
 # create digit dictionary to translate digit words into ints
 digit_dict = {
-    'one': '1',
-    'two': '2',
-    'three': '3',
-    'four': '4', 
-    'five': '5',
-    'six': '6',
-    'seven': '7', 
-    'eight': '8',
-    'nine': '9'
+    'one': 'o1e',
+    'two': 't2o',
+    'three': 't3e',
+    'four': 'f4r', 
+    'five': 'f5e',
+    'six': 's6x',
+    'seven': 's7n', 
+    'eight': 'e8t',
+    'nine': 'n9e'
 }
+first_letter_digit = ['o', 't', 'f', 's', 'e', 'n']
 
 def sum_first_last_w_words(dataset):
     '''returns sum of first and last digit--word or int---of each line in dataset'''
@@ -92,15 +93,16 @@ def sum_first_last_w_words(dataset):
     
     # iterating over each line of data
     for line in dataset:
+        line_num = ''
         # check to see if line contains any digit words
         while any(word_digit in line for word_digit in digit_dict.keys()):
             # if word_digit, replace with string of int
             for word_digit in digit_dict.keys():
                 if word_digit in line:
                     line = line.replace(word_digit, digit_dict[word_digit])
-        line_sum = sum_first_last_digit(line)
-        total_sum += line_sum
-        print(line, sum_first_last_digit(line), total_sum)
+
+        total_sum += sum_first_last_digit(line)  
+        # print(line, sum_first_last_digit(line), total_sum)
     
     return total_sum
 
