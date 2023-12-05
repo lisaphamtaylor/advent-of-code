@@ -30,14 +30,50 @@ Determine which games would have been possible if the bag had been loaded with o
 import re
 
 # opening input file and reading lines of data and saving to list
-# data = open('day2_input.txt').read().split('\n')
-data = ['Game 1: 18 red, 8 green, 7 blue; 15 red, 4 blue, 1 green; 2 green, 17 red, 6 blue; 5 green, 1 blue, 11 red; 18 red, 1 green, 14 blue; 8 blue','Game 2: 16 blue, 12 green, 3 red; 13 blue, 2 red, 8 green; 15 green, 3 red, 16 blue','Game 3: 6 green, 15 red; 1 green, 4 red, 7 blue; 9 blue, 7 red, 8 green']
+data = open('day2_input.txt').read().split('\n')
+
+green_max = 13
+red_max = 12
+blue_max = 14
+
+green_regex = re.compile(r'green$')
+red_regex = re.compile(r'red$')
+blue_regex = re.compile(r'blue$')
+
+regex_list = [green_regex, red_regex, blue_regex]
+game_set = set()
+
 
 for game in data:
     color_sets = re.split(':|;|,', game)
-    game_count = color_sets[0][-1]
-    print(game_count)
-    # print(color_sets)
-    # for i in range(1, len(color_sets)):
-    #     if bool(re.search('red', color_sets[i])):
-    #         print('red')
+    game_count = int(re.findall(r'\d+', color_sets[0])[0])
+    # print(game_count)
+    game_set.add(game_count)
+
+    for regex in regex_list:
+        color = regex.pattern[:-1]
+        
+        for i in range(1, len(color_sets)):
+            color_set = color_sets[i]
+            if game_count in game_set and re.search(regex, color_set):
+                num = re.findall(r'\d+', color_sets[i])
+                if color == 'green':
+                    if int(num[0]) > green_max:
+                        # print(f'Game {game_count} not possible on {color}')
+                        game_set.remove(game_count)
+                        break
+                elif color == 'red':
+                    if int(num[0]) > red_max:
+                        # print(f'Game {game_count} not possible on {color}')
+                        game_set.remove(game_count)
+                        break
+                elif color == 'blue':
+                    if int(num[0]) > blue_max:
+                        # print(f'Game {game_count} not possible on {color}')
+                        game_set.remove(game_count)
+                        break
+
+print(f'Day 2-Part 1 Answer: {sum(game_set)}')     # sum = 2331
+
+
+
